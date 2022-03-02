@@ -1,0 +1,16 @@
+{
+  "name": "hackathonq22022frontend",
+  "version": "1.0.0",
+  "description": "Hackathon Q2 2022 Frontend",
+  "main": "game.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phairow/HackathonQ22022Frontend.git"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/phairow/HackathonQ22022Frontend#readme",
+  "private": true
+}
