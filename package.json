@@ -4,7 +4,7 @@
   "description": "Hackathon Q2 2022 Frontend",
   "main": "game.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node game.js"
   },
   "repository": {
     "type": "git",
