@@ -1,6 +1,6 @@
 let leaders = [
   {
-      'playerId': 'drew',
+      'playerId': '8e8047ff-666b-4435-b3f0-3cc571eace62',
       'score': 0.5,
       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
   },
@@ -10,7 +10,7 @@ let leaders = [
       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
   },
   {
-      'playerId': 'john',
+      'playerId': '7123e6ea-1efa-4cda-95f3-72ef1467a04b',
       'score': 23.5,
       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
   },
@@ -20,12 +20,12 @@ let leaders = [
       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
   },
   {
-      'playerId': 'rai',
+      'playerId': 'ab58b1c3-45c8-4a2a-971e-c5be741a9b42',
       'score': 13.5,
       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
   },
   {
-      'playerId': 'ab58b1c3-45c8-4a2a-971e-c5be741a9b42',
+      'playerId': 'rai',
       'score': 3.5,
       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
   },
@@ -35,7 +35,7 @@ let leaders = [
       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
   },
   {
-      'playerId': '7123e6ea-1efa-4cda-95f3-72ef1467a04b',
+      'playerId': 'john',
       'score': 5.0,
       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
   },
@@ -45,7 +45,7 @@ let leaders = [
       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
   },
   {
-      'playerId': '8e8047ff-666b-4435-b3f0-3cc571eace62',
+      'playerId': 'drew',
       'score': 33.5,
       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
   }
@@ -98,6 +98,7 @@ class Leaderboard {
         }
         return 0;
       })
+      .reverse()
       .forEach((player) => {
         boardView.append(this.getRow(player))
       });
