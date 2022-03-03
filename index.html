@@ -16,11 +16,18 @@
     <script src="/game/leaderboard.js"></script>
   </head>
   <body>
-    <h1 id="heading">Hackathon Q2 2022 <span id="game-instance"></span></h1>
+    <h1 id="heading">
+      Hackathon Q2 2022
+      <span id="game-instance"></span>
+      <button onclick="shareGame();" class="share-button">
+        <img class="share-icon" src="/game/share.png" />
+      </button>
+      <span style="display:none;font-size:12px;" class="share-message">Copied to clipboard!</span>
+    </h1>
     <div id="login-container" class="container">
       <div id="login-view" class="fixed">
         <form action="javascript:() => false;">
-          Player:
+          Player: 
           <input autofocus="autofocus" id="username" type="text"/>
           <button type="submit" onclick="login();">Start Game</button>
         </form>
@@ -32,7 +39,10 @@
     </div>
     <div class="container">
       <div id="game-container" class="container flex-item" style="display:none;">
-        <div id="game-view" class="fixed"></div>
+        <div class="container-column fixed">
+          <div class="flex-item">Use 	&#8592; and &#8594; to move and space bar to fire missiles &#128640;</div>
+          <div id="game-view" class="flex-item"></div>
+        </div>
         <div id="leaderboard-container" class="container-column flex-item">
           Current Game Ranking
           <div id="leaderboard-view" class="flex-item"></div>
@@ -47,12 +57,20 @@
       let game = new Game();
       let leaderboard = new Leaderboard();
       let leaderboardGlobal = new Leaderboard();
-      let gameInstanceId = `Q2_2022_game_id_${Date.now()}`;
+      let gameInstanceId = '';
+      let query = new URLSearchParams(window.location.search);
+      
+      if (query.has('gameInstanceId')) {
+        gameInstanceId = query.get('gameInstanceId');
+      } else {
+        gameInstanceId = `Q2_2022_game_id_${Date.now()}`;
+      }
+
       let gameChannel = `scores-${gameInstanceId}`;
       let leaderboardChannel = `leaderboard-${gameInstanceId}-points`;
       let leaderboardGlobalChannel = `leaderboard-points`;
-      let publishKey = 'demo';
-      let subscribeKey = 'demo';
+      let publishKey = 'pub-c-f076d9c1-172d-479e-8bcd-c7aa591f0752';
+      let subscribeKey = 'sub-c-b6721214-9a5f-11ec-8d33-deca9b9b34c5';
       let uuid = '__UUID__';
       let loginView = $('#login-view');
       let loggedinView = $('#loggedin-view');
@@ -70,7 +88,7 @@
         publishKey,
         subscribeKey,
         uuid,
-        // origin: "balancer-bronze1.aws-pdx-1.ps.pn",
+        origin: "ingress-tcp-pub.pdx1.aws.int.ps.pn",
       });
 
       pubnub.addListener({
@@ -205,6 +223,16 @@ setTimeout(() => {
         loggedinView.hide();
         gameContainer.hide();
         game.stop();
+      }
+
+      function shareGame() {
+        let link = 'https://optimistic-mcnulty-65517e.netlify.app?gameInstanceId=' + gameInstanceId;
+        var data = [new ClipboardItem({ "text/plain": new Blob([link], { type: "text/plain" }) })];
+        navigator.clipboard.write(data).then(function() {
+          $('.share-message').fadeIn(500).fadeOut(2000);
+        }, function() {
+          alert("Unable to write to clipboard. :-(");
+        });
       }
 
     </script>

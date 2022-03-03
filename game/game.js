@@ -9,8 +9,21 @@ class Game {
     this.app = undefined;
     this.gameInstanceId = undefined;
     this.missiles = [];
-    this.score = 0;
     this.hits = [];
+
+    // stats
+    this.score = 0;
+    this.shield = 100;
+    this.ammo = 1000;
+    this.shots = 0;
+
+    // actions
+    this.moveLeft = false;
+    this.moveRight = false;
+    this.fire = false;
+
+    // fire
+    this.firecounter = 0;
   }
 
   start(gameView, gameInstanceId, uuid, pubnub, gameChannel) {
@@ -111,6 +124,23 @@ class Game {
         }
       }
 
+      if (this.fire) {
+        if (this.firecounter % 7 === 0) {
+          let missile = PIXI.Sprite.from('/game/profile/box.png');
+          missile.width = 5;
+          missile.height = 10;
+          missile.x = this.shooter.x + 8;
+          missile.y = 320;
+      
+          this.app.stage.addChild(missile);
+      
+          this.missiles.push(missile);
+        }
+
+        this.firecounter += 1;
+        this.shots += 1;
+      }
+
       text.text = 'Score: ' + this.score;
 
       if (previousScore !== this.score) {
@@ -149,7 +179,7 @@ class Game {
       }
 
       if (key === space) {
-        this.fire();
+        this.fire = true;
       }
     });
 
@@ -166,19 +196,12 @@ class Game {
         this.moveRight = false;
       }
 
+      if (key === space) {
+        this.fire = false;
+        this.firecounter = 0;
+      }
+
     });
-  }
-
-  fire() {
-    let missile = PIXI.Sprite.from('/game/profile/box.png');
-    missile.width = 5;
-    missile.height = 20;
-    missile.x = this.shooter.x + 8;
-    missile.y = 320;
-
-    this.app.stage.addChild(missile);
-
-    this.missiles.push(missile);
   }
 
   sendScore() {
@@ -191,6 +214,18 @@ class Game {
             {
                 key: 'points', 
                 value: this.score,
+            },
+            {
+                key: 'health', 
+                value: this.shield,
+            },
+            {
+                key: 'ammo', 
+                value: this.ammo,
+            },
+            {
+                key: 'shots', 
+                value: this.shots,
             }
         ]
       }

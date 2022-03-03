@@ -3,7 +3,8 @@ var fs = require('fs'),
 
 http.createServer(function (req, res) {
   console.log(req.url);
-  let filename = req.url === '' || req.url === '/' ? '/index.html': req.url.split('?')[0];
+  let path = req.url.split('?')[0];
+  let filename = path === '' || path === '/' ? '/index.html': path;
 
   fs.readFile(__dirname + filename, function (err,data) {
     if (err) {
