@@ -58,23 +58,36 @@ html {
   margin-bottom: 4px;
 }
 
+.leaderboard-column-rank-pic {
+  display: inline-block;
+  overflow: hidden;
+  width: 50px;
+}
+
+.leaderboard-column-rank {
+  display: inline-block;
+  overflow: hidden;
+  width: 20px;
+}
+
 .leaderboard-column-pic {
   display: inline-block;
+  overflow: hidden;
   width: 30px;
 }
 
 .leaderboard-column-name {
   display: inline-block;
   width: 180px;
-  max-width: 180px;
+  max-width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-
 .leaderboard-column-score {
   display: inline-block;
+  overflow: hidden;
   width: 60px;
 }
 

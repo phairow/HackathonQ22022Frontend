@@ -21,8 +21,8 @@ class Leaderboard {
     this.board.append(`
       <div class="board_${gameInstanceId}">
         <div class="leaderboard-row leaderboard-header">
-          <div class="leaderboard-column-pic">
-            
+          <div class="leaderboard-column-rank-pic">
+            Rank
           </div>
           <div class="leaderboard-column-name">
             Player
@@ -47,25 +47,28 @@ class Leaderboard {
         return 0;
       })
       .reverse()
-      .forEach((player) => {
-        boardView.append(this.getRow(player))
+      .forEach((player, i) => {
+        boardView.append(this.getRow(player, i + 1))
       });
   }
 
-  getRow(player) {
+  getRow(player, rank) {
     let profile = this.getProfile(player.playerId);
     
     return `
       <div class="leaderboard-row">
-      <div class="leaderboard-column-pic">
-        <img style="width:20px" src="/game/profile/${profile.playerPic}"/>
-      </div>
-      <div class="leaderboard-column-name">
-        ${profile.playerName}
-      </div>
-      <div class="leaderboard-column-score">
-        ${player.score}
-      </div>
+        <div class="leaderboard-column-rank">
+          ${rank}
+        </div>
+        <div class="leaderboard-column-pic">
+          <img style="width:20px" src="/game/profile/${profile.playerPic}"/>
+        </div>
+        <div class="leaderboard-column-name">
+          ${profile.playerName}
+        </div>
+        <div class="leaderboard-column-score">
+          ${player.score}
+        </div>
       </div>
     `;
   }
@@ -87,7 +90,7 @@ class Leaderboard {
 
   setLeaders(leaders) {
     this.leaders =  leaders;
-    this.update();s
+    this.update();
   }
 }
 

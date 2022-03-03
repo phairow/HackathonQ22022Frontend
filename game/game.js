@@ -38,6 +38,7 @@ class Game {
     gameView.append(this.app.view);
 
     this.render();
+    this.sendScore();
     this.keyboard();
   }
 
@@ -169,7 +170,6 @@ class Game {
     $(document).keydown((e) => {
       let key = e.which;
 
-
       if (key === leftArrow) {
         this.moveLeft = true;
       }
@@ -185,8 +185,6 @@ class Game {
 
     $(document).keyup((e) => {
       let key = e.which;
-
-      console.log('key', key);
 
       if (key === leftArrow) {
         this.moveLeft = false;

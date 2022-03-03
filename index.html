@@ -69,8 +69,8 @@
       let gameChannel = `scores-${gameInstanceId}`;
       let leaderboardChannel = `leaderboard-${gameInstanceId}-points`;
       let leaderboardGlobalChannel = `leaderboard-points`;
-      let publishKey = 'pub-c-f076d9c1-172d-479e-8bcd-c7aa591f0752';
-      let subscribeKey = 'sub-c-b6721214-9a5f-11ec-8d33-deca9b9b34c5';
+      let publishKey = 'demo';
+      let subscribeKey = 'demo';
       let uuid = '__UUID__';
       let loginView = $('#login-view');
       let loggedinView = $('#loggedin-view');
@@ -127,80 +127,6 @@
         gameChannel
       ]);
 
-      // let leaders = [
-      //   {
-      //       'playerId': '8e8047ff-666b-4435-b3f0-3cc571eace62',
-      //       'score': 0.5,
-      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-      //   },
-      //   {
-      //       'playerId': 'b1070140-5eae-45e0-bca3-ff9c1b93dd01',
-      //       'score': 11.5,
-      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-      //   },
-      //   {
-      //       'playerId': '7123e6ea-1efa-4cda-95f3-72ef1467a04b',
-      //       'score': 23.5,
-      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-      //   },
-      //   {
-      //       'playerId': '3207fd3e-14c2-46d7-b672-736cbb8380f4',
-      //       'score': 20.0,
-      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-      //   },
-      //   {
-      //       'playerId': 'ab58b1c3-45c8-4a2a-971e-c5be741a9b42',
-      //       'score': 13.5,
-      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-      //   },
-      //   {
-      //       'playerId': 'rai',
-      //       'score': 3.5,
-      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-      //   },
-      //   {
-      //       'playerId': '0f4421c3-a99d-4fa9-a5be-da96051f6b57',
-      //       'score': 2.5,
-      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-      //   },
-      //   {
-      //       'playerId': 'john',
-      //       'score': 5.0,
-      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-      //   },
-      //   {
-      //       'playerId': '8ecdb2cf-fd2f-4488-84df-0b1c5a656e9f',
-      //       'score': 213.5,
-      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-      //   },
-      //   {
-      //       'playerId': 'drew',
-      //       'score': 33.5,
-      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-      //   }
-      // ];
-      
-      // pubnub.publish({
-      //   channel: leaderboardChannel,
-      //   message: {
-      //     gameInstanceId,
-      //     leaders
-      //   }
-      // });
-      
-      // pubnub.publish({
-      //   channel: leaderboardGlobalChannel,
-      //   message: {
-      //     gameInstanceId,
-      //     leaders
-      //   }
-      // });
-
-// setTimeout(() => {
-//   leaderboardGlobal.start(leaderboardGlobalView, gameInstanceId, uuid, pubnub, leaderboardGlobalChannel);
-// }, 1000);
-      
-
       function login() {
         let username = userNameTextBox.val();
 
@@ -226,6 +152,123 @@
 
         game.start(gameView, gameInstanceId, uuid, pubnub, gameChannel);
         leaderboard.start(leaderboardView, leaderboardGlobalView, gameInstanceId, uuid, pubnub, leaderboardChannel);
+
+//       leaderboard.setLeaders({
+//     "gameInstanceId": "Q2_2022_game_id_1646336939946",
+//     "stat": "points",
+//     "leaders": [
+//         {
+//             "playerId": "6709a1cc-e6a1-4b3f-ab98-a24c25c5d096",
+//             "score": 0.5,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "b28c566f-3927-496b-96a8-a1374ce246e4",
+//             "score": 2.43,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "0f4421c3-a99d-4fa9-a5be-da96051f6b57",
+//             "score": 2.5,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "ab58b1c3-45c8-4a2a-971e-c5be741a9b42",
+//             "score": 3.5,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "7123e6ea-1efa-4cda-95f3-72ef1467a04b",
+//             "score": 500,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "b1070140-5eae-45e0-bca3-ff9c1b93dd01",
+//             "score": 11.5,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "0db4c287-b6dd-451d-b622-6d028d90f0e1",
+//             "score": 13.5,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "3207fd3e-14c2-46d7-b672-736cbb8380f4",
+//             "score": 2000,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "8e8047ff-666b-4435-b3f0-3cc571eace62",
+//             "score": 330.5,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "8ecdb2cf-fd2f-4488-84df-0b1c5a656e9f",
+//             "score": 213.5,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         }
+//     ]
+// }.leaders);
+
+// setTimeout(() => {
+  
+//   leaderboard.setLeaders({
+//     "gameInstanceId": "Q2_2022_game_id_1646336939946",
+//     "stat": "points",
+//     "leaders": [
+//         {
+//             "playerId": "rai",
+//             "score": 0.5,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "b28c566f-3927-496b-96a8-a1374ce246e4",
+//             "score": 2.43,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "0f4421c3-a99d-4fa9-a5be-da96051f6b57",
+//             "score": 2.5,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "ab58b1c3-45c8-4a2a-971e-c5be741a9b42",
+//             "score": 3.5,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "rai",
+//             "score": 501,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "b1070140-5eae-45e0-bca3-ff9c1b93dd01",
+//             "score": 11.5,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "0db4c287-b6dd-451d-b622-6d028d90f0e1",
+//             "score": 13.5,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "3207fd3e-14c2-46d7-b672-736cbb8380f4",
+//             "score": 2000,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "8e8047ff-666b-4435-b3f0-3cc571eace62",
+//             "score": 330.5,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "8ecdb2cf-fd2f-4488-84df-0b1c5a656e9f",
+//             "score": 213.5,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         }
+//     ]
+// }.leaders);
+// }, 1000);
       }
 
       function stopGame() {
