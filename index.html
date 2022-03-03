@@ -44,13 +44,16 @@
       </div>
     </div>
     <script>
+      let game = new Game();
+      let leaderboard = new Leaderboard();
+      let leaderboardGlobal = new Leaderboard();
       let gameInstanceId = `Q2_2022_game_id_${Date.now()}`;
       let gameChannel = `scores-${gameInstanceId}`;
       let leaderboardChannel = `leaderboard-${gameInstanceId}-points`;
       let leaderboardGlobalChannel = `leaderboard-points`;
-      let publishKey = 'myPublishKey';
+      let publishKey = 'demo';
+      let subscribeKey = 'demo';
       let uuid = '__UUID__';
-      let subscribeKey = 'mySubscribeKey';
       let loginView = $('#login-view');
       let loggedinView = $('#loggedin-view');
       let loggedinUser= $('#loggedin-user');
@@ -67,13 +70,108 @@
         publishKey,
         subscribeKey,
         uuid,
+        // origin: "balancer-bronze1.aws-pdx-1.ps.pn",
       });
 
-      let game = new Game();
-      let leaderboard = new Leaderboard();
-      let leaderboardGlobal = new Leaderboard();
+      pubnub.addListener({
+        message: (m) => {
+          if (m.channel === gameChannel) {
+            console.log('game channel:', m.message)
+          }
 
-      leaderboardGlobal.start(leaderboardGlobalView, gameInstanceId, uuid, pubnub, leaderboardGlobalChannel);
+          if (m.channel === leaderboardChannel) {
+            console.log('leaderboard channel:', m.message)
+            leaderboard.setLeaders(m.message.leaders);
+          }
+
+          if (m.channel === leaderboardGlobalChannel) {
+            console.log('leaderboard global channel:', m.message)
+            leaderboardGlobal.setLeaders(m.message.leaders);
+          }
+        }
+      });
+
+      pubnub.subscribe({
+        channels: [
+          leaderboardChannel,
+          leaderboardGlobalChannel,
+          gameChannel
+        ]
+      });
+
+      let leaders = [
+        {
+            'playerId': '8e8047ff-666b-4435-b3f0-3cc571eace62',
+            'score': 0.5,
+            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+        },
+        {
+            'playerId': 'b1070140-5eae-45e0-bca3-ff9c1b93dd01',
+            'score': 11.5,
+            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+        },
+        {
+            'playerId': '7123e6ea-1efa-4cda-95f3-72ef1467a04b',
+            'score': 23.5,
+            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+        },
+        {
+            'playerId': '3207fd3e-14c2-46d7-b672-736cbb8380f4',
+            'score': 20.0,
+            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+        },
+        {
+            'playerId': 'ab58b1c3-45c8-4a2a-971e-c5be741a9b42',
+            'score': 13.5,
+            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+        },
+        {
+            'playerId': 'rai',
+            'score': 3.5,
+            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+        },
+        {
+            'playerId': '0f4421c3-a99d-4fa9-a5be-da96051f6b57',
+            'score': 2.5,
+            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+        },
+        {
+            'playerId': 'john',
+            'score': 5.0,
+            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+        },
+        {
+            'playerId': '8ecdb2cf-fd2f-4488-84df-0b1c5a656e9f',
+            'score': 213.5,
+            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+        },
+        {
+            'playerId': 'drew',
+            'score': 33.5,
+            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+        }
+      ];
+      
+      pubnub.publish({
+        channel: leaderboardChannel,
+        message: {
+          gameInstanceId,
+          leaders
+        }
+      });
+      
+      pubnub.publish({
+        channel: leaderboardGlobalChannel,
+        message: {
+          gameInstanceId,
+          leaders
+        }
+      });
+
+setTimeout(() => {
+  leaderboardGlobal.start(leaderboardGlobalView, gameInstanceId, uuid, pubnub, leaderboardGlobalChannel);
+}, 1000);
+      
 
       function login() {
         let username = userNameTextBox.val();

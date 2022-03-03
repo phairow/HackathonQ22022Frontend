@@ -13,7 +13,8 @@ class Game {
     this.hits = [];
   }
 
-  start(gameView, gameInstanceId, uuid, pubnub) {
+  start(gameView, gameInstanceId, uuid, pubnub, gameChannel) {
+    this.gameChannel = gameChannel;
     this.pubnub = pubnub;
     this.uuid = uuid;
     this.gameInstanceId = gameInstanceId;
@@ -58,6 +59,7 @@ class Game {
     this.app.stage.addChild(enemy);
 
     let elapsed = 0.0;
+    let previousScore = this.score;
     this.app.ticker.add((delta) => {
       elapsed += delta;
       enemy.x = 300.0 + Math.cos(elapsed/50.0) * 300.0;
@@ -110,6 +112,11 @@ class Game {
       }
 
       text.text = 'Score: ' + this.score;
+
+      if (previousScore !== this.score) {
+        previousScore = this.score;
+        this.sendScore();
+      }
     });
 
 
@@ -172,6 +179,22 @@ class Game {
     this.app.stage.addChild(missile);
 
     this.missiles.push(missile);
+  }
+
+  sendScore() {
+    this.pubnub.publish({
+      channel: this.gameChannel,
+      message: {
+        gameInstanceId: this.gameInstanceId,
+        uuid: this.uuid, 
+        stats: [
+            {
+                key: 'points', 
+                value: this.score,
+            }
+        ]
+      }
+    });
   }
 }
 
