@@ -4,13 +4,16 @@ class Game {
     this.reset();
   }
 
-  reset () {
+  reset() {
     this.uuid = undefined;
     this.app = undefined;
     this.gameInstanceId = undefined;
+    this.missiles = [];
+    this.score = 0;
+    this.hits = [];
   }
 
-  start (gameView, gameInstanceId, uuid, pubnub) {
+  start(gameView, gameInstanceId, uuid, pubnub) {
     this.pubnub = pubnub;
     this.uuid = uuid;
     this.gameInstanceId = gameInstanceId;
@@ -21,34 +24,154 @@ class Game {
     gameView.append(this.app.view);
 
     this.render();
+    this.keyboard();
   }
 
-  stop () {
+  stop() {
     this.app.ticker.stop();
     this.app.destroy(true);
     this.reset();
   }
 
-  render () {
+  render() {
     if (!this.app) {
       return;
     }
 
-    let sprite = PIXI.Sprite.from('/game/profile/box.png');
+    let headerHeight = 30;
 
-    this.app.stage.addChild(sprite);
+    let header = new PIXI.Graphics();
+    header.beginFill(0x333333);
+    header.lineStyle(1, 0xFFFFFF);
+    header.drawRect(1, 1, 639, headerHeight - 2);
 
-    // Add a variable to count up the seconds our demo has been running
+    this.app.stage.addChild(header);
+
+    let text = new PIXI.Text('Score: 0',{fontFamily : 'Arial', fontSize: 16, fill : 0xCCCCCC, align : 'center'});
+    text.x = 5;
+    text.y = 5;
+
+    this.app.stage.addChild(text);
+
+    let enemy = PIXI.Sprite.from('/game/profile/box.png');
+
+    this.app.stage.addChild(enemy);
+
     let elapsed = 0.0;
-    // Tell our application's ticker to run a new callback every frame, passing
-    // in the amount of time that has passed since the last tick
     this.app.ticker.add((delta) => {
-      // Add the time to our total elapsed time
       elapsed += delta;
-      // Update the sprite's X position based on the cosine of our elapsed time.  We divide
-      // by 50 to slow the animation down a bit...
-      sprite.x = 300.0 + Math.cos(elapsed/50.0) * 300.0;
+      enemy.x = 300.0 + Math.cos(elapsed/50.0) * 300.0;
+      enemy.y = headerHeight;
+
+      let missilesToRemove = [];
+      this.missiles.forEach((missile) => {
+        if (missile.y > headerHeight) {
+          missile.y -= 10;
+
+          let missileLeft = missile.x;
+          let missileRight = missile.x + missile.width;
+          let missileTop = missile.y;
+          let enemyLeft = enemy.x;
+          let enemyRight = enemy.x + enemy.width;
+          let enemyBottom = enemy.y + enemy.height;
+          
+          if (
+            missileRight > enemyLeft &&
+            missileLeft < enemyRight &&
+            missileTop <= enemyBottom
+          ) {
+            if (!this.hits.includes(missile)) {
+              this.hits.push(missile);
+              this.score += 1;
+              missilesToRemove.push(missile);
+              this.app.stage.removeChild(missile);
+            }
+          }
+        } else {
+          missilesToRemove.push(missile);
+          this.app.stage.removeChild(missile);
+        }
+      });
+
+      missilesToRemove.forEach((missile, index) => {
+        delete this.missiles[index];
+      });
+
+      if (this.moveLeft) {
+        if (this.shooter.x > headerHeight) {
+          this.shooter.x -= 4;
+        }
+      }
+
+      if (this.moveRight) {
+        if (this.shooter.x < 620) {
+          this.shooter.x += 4;
+        }
+      }
+
+      text.text = 'Score: ' + this.score;
     });
+
+
+    let shooter = PIXI.Sprite.from('/game/profile/box.png');
+    shooter.width = 20;
+    shooter.height = 20;
+    shooter.x = 320;
+    shooter.y = 340;
+
+    this.app.stage.addChild(shooter);
+
+    this.shooter = shooter;
+  }
+
+  keyboard() {
+    let leftArrow = 37;
+    let rightArrow = 39;
+    let space = 32;
+
+    $(document).keydown((e) => {
+      let key = e.which;
+
+
+      if (key === leftArrow) {
+        this.moveLeft = true;
+      }
+
+      if (key === rightArrow) {
+        this.moveRight = true;
+      }
+
+      if (key === space) {
+        this.fire();
+      }
+    });
+
+    $(document).keyup((e) => {
+      let key = e.which;
+
+      console.log('key', key);
+
+      if (key === leftArrow) {
+        this.moveLeft = false;
+      }
+
+      if (key === rightArrow) {
+        this.moveRight = false;
+      }
+
+    });
+  }
+
+  fire() {
+    let missile = PIXI.Sprite.from('/game/profile/box.png');
+    missile.width = 5;
+    missile.height = 20;
+    missile.x = this.shooter.x + 8;
+    missile.y = 320;
+
+    this.app.stage.addChild(missile);
+
+    this.missiles.push(missile);
   }
 }
 

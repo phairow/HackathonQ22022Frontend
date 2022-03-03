@@ -53,12 +53,12 @@ let leaders = [
 
 class Leaderboard {
 
-  constructor () {
+  constructor() {
     this.board = undefined;
     this.players = [];
   }
 
-  start (board, gameInstanceId, uuid, pubnub, channel) {
+  start(board, gameInstanceId, uuid, pubnub, channel) {
     this.channel = channel;
     this.pubnub = pubnub;
     this.uuid = uuid;
@@ -68,7 +68,7 @@ class Leaderboard {
     this.update();
   }
 
-  update () {
+  update() {
     this.board.html('');
     
     this.board.append(`
