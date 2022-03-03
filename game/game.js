@@ -4,13 +4,18 @@ class Game {
     this.app = undefined;
   }
 
-  start (app) {
-    this.app = app;
+  start (gameView) {
+    this.app = new PIXI.Application({ width: 640, height: 360 });
+    gameView.appendChild(this.app.view);
     this.render();
   }
 
   render () {
-    let sprite = PIXI.Sprite.from('box.png');
+    if (!this.app) {
+      return;
+    }
+
+    let sprite = PIXI.Sprite.from('/game/profile/box.png');
 
     this.app.stage.addChild(sprite);
 
@@ -18,7 +23,7 @@ class Game {
     let elapsed = 0.0;
     // Tell our application's ticker to run a new callback every frame, passing
     // in the amount of time that has passed since the last tick
-    app.ticker.add((delta) => {
+    this.app.ticker.add((delta) => {
       // Add the time to our total elapsed time
       elapsed += delta;
       // Update the sprite's X position based on the cosine of our elapsed time.  We divide
