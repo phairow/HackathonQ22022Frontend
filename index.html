@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width">
     <meta charset="utf-8">
 
-    <title>Hackathon Q2 2022 Frontend</title>
+    <title>Hackathon Q2 2022</title>
 
     <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/index.css?v=0.0.1">
@@ -16,18 +16,79 @@
     <script src="/game/leaderboard.js"></script>
   </head>
   <body>
-    <h1>Hackathon Q2 2022 Frontend</h1>
-    <div class="container">
+    <h1 id="heading">Hackathon Q2 2022 <span id="game-instance"></span></h1>
+    <div id="login-container" class="container">
+      <div id="login-view" class="fixed">
+        <form action="javascript:() => false;">
+          Player:
+          <input id="username" type="text"/>
+          <button type="submit" onclick="login();">Login</button>
+        </form>
+      </div>
+      <div id="loggedin-view" class="fixed" style="display:none";>
+        Player: <span id="loggedin-user"></span>
+        <button type="submit" onclick="logout();">Exit</button>
+      </div>
+    </div>
+    <div id="game-container" class="container" style="display:none;">
       <div id="game-view" class="fixed"></div>
       <div id="leaderboard-view" class="flex-item">Leader</div>
     </div>
     <script>
+      let gameInstanceId = "Q2_2022_game_id_" + Date.now();
+      let publishKey = "myPublishKey";
+      let subscribeKey = "mySubscribeKey";
 
-      let gameView = document.getElementById('game-view');
-      game.start(gameView);
+      let pubnub = new PubNub({
+        publishKey : "myPublishKey",
+        subscribeKey : "mySubscribeKey",
+        uuid: "__UUID__",
+      });
 
-      let leaderboardView = document.getElementById('leaderboard-view');
-      leaderboard.start(leaderboardView);
+      let loginView = $('#login-view');
+      let loggedinView = $('#loggedin-view');
+      let loggedinUser= $('#loggedin-user');
+      let gameContainer = $('#game-container');
+      let gameView = $('#game-view');
+      let leaderboardView = $('#leaderboard-view');
+      let gameInstanceView = $('#game-instance');
+      let userNameTextBox = $('#username');
+
+      gameInstanceView.text(`(${gameInstanceId})`);
+
+      function login() {
+        let username = userNameTextBox.val();
+
+        if (username.length < 1) {
+          alert('user name required');
+        } else {
+          startGame(username);
+        }
+      }
+
+      function logout() {
+        userNameTextBox.val("");
+
+        stopGame();
+      }
+
+      function startGame(uuid) {
+        loginView.hide();
+        loggedinView.fadeIn();
+        gameContainer.fadeIn();
+
+        loggedinUser.text(uuid);
+
+        game.start(gameView, gameInstanceId, uuid, pubnub);
+        leaderboard.start(leaderboardView, gameInstanceId, uuid, pubnub);
+      }
+
+      function stopGame() {
+        loginView.fadeIn();
+        loggedinView.hide();
+        gameContainer.hide();
+        game.stop();
+      }
 
     </script>
   </body>

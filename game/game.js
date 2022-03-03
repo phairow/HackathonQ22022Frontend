@@ -1,13 +1,32 @@
 class Game {
 
   constructor (app) {
-    this.app = undefined;
+    this.reset();
   }
 
-  start (gameView) {
+  reset () {
+    this.uuid = undefined;
+    this.app = undefined;
+    this.gameInstanceId = undefined;
+  }
+
+  start (gameView, gameInstanceId, uuid, pubnub) {
+    this.pubnub = pubnub;
+    this.uuid = uuid;
+    this.gameInstanceId = gameInstanceId;
     this.app = new PIXI.Application({ width: 640, height: 360 });
-    gameView.appendChild(this.app.view);
+
+    pubnub.setUUID(uuid);
+
+    gameView.append(this.app.view);
+
     this.render();
+  }
+
+  stop () {
+    this.app.ticker.stop();
+    this.app.destroy(true);
+    this.reset();
   }
 
   render () {

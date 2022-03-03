@@ -1,5 +1,7 @@
 html {
-  background-color: antiquewhite;
+  color: #c0c5ce;
+  background-color: #343d46;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 #game-view {
@@ -18,6 +20,19 @@ html {
   margin-top: 1px;
   margin-bottom: 1px;
   padding: 10px;
+}
+
+#game-instance {
+  color: #4f5b66;
+  font-size: medium;
+}
+
+#login-container {
+  padding-bottom: 10px;
+}
+
+#loggedin-user {
+  font-weight: bold;
 }
 
 .container{

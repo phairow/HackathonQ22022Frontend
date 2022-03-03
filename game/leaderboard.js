@@ -5,19 +5,21 @@ class Leaderboard {
     this.players = [];
   }
 
-  start (board) {
-    this.pubnub = new PubNub({
-      publishKey : "myPublishKey",
-      subscribeKey : "mySubscribeKey",
-      uuid: "myUniqueUUID"
-    });
+  start (board, gameInstanceId, uuid, pubnub) {
+    this.pubnub = pubnub;
+    this.uuid = uuid;
+    this.gameInstanceId = gameInstanceId;
+    this.board = board;
 
-    this.board = $(board);
     this.update();
   }
 
   update () {
-    this.board.html('<div>board</div>');
+    this.board.html(`
+      <div>
+        leader board
+      </div>
+    `);
   }
 
   getProfilePic(uuid) {
