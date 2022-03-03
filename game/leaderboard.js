@@ -69,6 +69,8 @@ class Leaderboard {
   }
 
   update () {
+    this.board.html('');
+    
     this.board.append(`
       <div class="board_${gameInstanceId}">
         <div class="leaderboard-row leaderboard-header">
