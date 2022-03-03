@@ -89,6 +89,7 @@ class Leaderboard {
     let boardView = this.board.children(`.board_${gameInstanceId}`)
     
     leaders
+      .slice()
       .sort((a, b) => {
         if ( a.points < b.points ){
           return -1;
