@@ -38,10 +38,10 @@ class Leaderboard {
     this.leaders
       .slice()
       .sort((a, b) => {
-        if ( a.points < b.points ){
+        if ( a.score < b.score ){
           return -1;
         }
-        if ( a.points > b.points ){
+        if ( a.score > b.score ){
           return 1;
         }
         return 0;
@@ -87,6 +87,7 @@ class Leaderboard {
 
   setLeaders(leaders) {
     this.leaders =  leaders;
+    this.update();s
   }
 }
 

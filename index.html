@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width">
     <meta charset="utf-8">
 
-    <title>Hackathon Q2 2022</title>
+    <title>Hackathon 2022 Game</title>
 
     <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/index.css?v=0.0.1">
@@ -17,11 +17,11 @@
   </head>
   <body>
     <h1 id="heading">
-      Hackathon Q2 2022
+      Hackathon 2022
       <span id="game-instance"></span>
-      <button onclick="shareGame();" class="share-button">
+      <a href="javascript:" class="share-button" target="">
         <img class="share-icon" src="/game/share.png" />
-      </button>
+      </a>
       <span style="display:none;font-size:12px;" class="share-message">Copied to clipboard!</span>
     </h1>
     <div id="login-container" class="container">
@@ -81,6 +81,9 @@
       let leaderboardGlobalView = $('#leaderboard-global-view');
       let gameInstanceView = $('#game-instance');
       let userNameTextBox = $('#username');
+      let shareGameAnchor = $('.share-button').first();
+
+      shareGameAnchor.attr('href', shareGameLink());
 
       gameInstanceView.text(`(${gameInstanceId})`);
 
@@ -118,78 +121,84 @@
         ]
       });
 
-      let leaders = [
-        {
-            'playerId': '8e8047ff-666b-4435-b3f0-3cc571eace62',
-            'score': 0.5,
-            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-        },
-        {
-            'playerId': 'b1070140-5eae-45e0-bca3-ff9c1b93dd01',
-            'score': 11.5,
-            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-        },
-        {
-            'playerId': '7123e6ea-1efa-4cda-95f3-72ef1467a04b',
-            'score': 23.5,
-            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-        },
-        {
-            'playerId': '3207fd3e-14c2-46d7-b672-736cbb8380f4',
-            'score': 20.0,
-            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-        },
-        {
-            'playerId': 'ab58b1c3-45c8-4a2a-971e-c5be741a9b42',
-            'score': 13.5,
-            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-        },
-        {
-            'playerId': 'rai',
-            'score': 3.5,
-            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-        },
-        {
-            'playerId': '0f4421c3-a99d-4fa9-a5be-da96051f6b57',
-            'score': 2.5,
-            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-        },
-        {
-            'playerId': 'john',
-            'score': 5.0,
-            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-        },
-        {
-            'playerId': '8ecdb2cf-fd2f-4488-84df-0b1c5a656e9f',
-            'score': 213.5,
-            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-        },
-        {
-            'playerId': 'drew',
-            'score': 33.5,
-            'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
-        }
-      ];
-      
-      pubnub.publish({
-        channel: leaderboardChannel,
-        message: {
-          gameInstanceId,
-          leaders
-        }
-      });
-      
-      pubnub.publish({
-        channel: leaderboardGlobalChannel,
-        message: {
-          gameInstanceId,
-          leaders
-        }
-      });
+      console.log('subscribed', [
+        leaderboardChannel,
+        leaderboardGlobalChannel,
+        gameChannel
+      ]);
 
-setTimeout(() => {
-  leaderboardGlobal.start(leaderboardGlobalView, gameInstanceId, uuid, pubnub, leaderboardGlobalChannel);
-}, 1000);
+      // let leaders = [
+      //   {
+      //       'playerId': '8e8047ff-666b-4435-b3f0-3cc571eace62',
+      //       'score': 0.5,
+      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+      //   },
+      //   {
+      //       'playerId': 'b1070140-5eae-45e0-bca3-ff9c1b93dd01',
+      //       'score': 11.5,
+      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+      //   },
+      //   {
+      //       'playerId': '7123e6ea-1efa-4cda-95f3-72ef1467a04b',
+      //       'score': 23.5,
+      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+      //   },
+      //   {
+      //       'playerId': '3207fd3e-14c2-46d7-b672-736cbb8380f4',
+      //       'score': 20.0,
+      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+      //   },
+      //   {
+      //       'playerId': 'ab58b1c3-45c8-4a2a-971e-c5be741a9b42',
+      //       'score': 13.5,
+      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+      //   },
+      //   {
+      //       'playerId': 'rai',
+      //       'score': 3.5,
+      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+      //   },
+      //   {
+      //       'playerId': '0f4421c3-a99d-4fa9-a5be-da96051f6b57',
+      //       'score': 2.5,
+      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+      //   },
+      //   {
+      //       'playerId': 'john',
+      //       'score': 5.0,
+      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+      //   },
+      //   {
+      //       'playerId': '8ecdb2cf-fd2f-4488-84df-0b1c5a656e9f',
+      //       'score': 213.5,
+      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+      //   },
+      //   {
+      //       'playerId': 'drew',
+      //       'score': 33.5,
+      //       'gameInstanceId': 'bd1d4463-e995-4f5b-ba77-61aac21f9f3b'
+      //   }
+      // ];
+      
+      // pubnub.publish({
+      //   channel: leaderboardChannel,
+      //   message: {
+      //     gameInstanceId,
+      //     leaders
+      //   }
+      // });
+      
+      // pubnub.publish({
+      //   channel: leaderboardGlobalChannel,
+      //   message: {
+      //     gameInstanceId,
+      //     leaders
+      //   }
+      // });
+
+// setTimeout(() => {
+//   leaderboardGlobal.start(leaderboardGlobalView, gameInstanceId, uuid, pubnub, leaderboardGlobalChannel);
+// }, 1000);
       
 
       function login() {
@@ -226,14 +235,15 @@ setTimeout(() => {
         game.stop();
       }
 
-      function shareGame() {
-        let link = 'https://optimistic-mcnulty-65517e.netlify.app?gameInstanceId=' + gameInstanceId;
-        var data = [new ClipboardItem({ "text/plain": new Blob([link], { type: "text/plain" }) })];
-        navigator.clipboard.write(data).then(function() {
-          $('.share-message').fadeIn(500).fadeOut(2000);
-        }, function() {
-          alert("Unable to write to clipboard. :-(");
-        });
+      function shareGameLink() {
+        return  'http://hackathon2022game.s3-website-us-west-2.amazonaws.com?gameInstanceId=' + gameInstanceId;
+        // let link = 'http://hackathon2022game.s3-website-us-west-2.amazonaws.com?gameInstanceId=' + gameInstanceId;
+        // var data = [new ClipboardItem({ "text/plain": new Blob([link], { type: "text/plain" }) })];
+        // navigator.clipboard.write(data).then(function() {
+        //   $('.share-message').fadeIn(500).fadeOut(2000);
+        // }, function() {
+        //   alert("Unable to write to clipboard. :-(");
+        // });
       }
 
     </script>
