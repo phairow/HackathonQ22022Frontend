@@ -52,4 +52,4 @@ class Game {
   }
 }
 
-window.game = new Game();
+window.Game = Game;

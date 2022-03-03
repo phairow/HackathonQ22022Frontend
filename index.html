@@ -22,52 +22,71 @@
         <form action="javascript:() => false;">
           Player:
           <input id="username" type="text"/>
-          <button type="submit" onclick="login();">Login</button>
+          <button type="submit" onclick="login();">Start Game</button>
         </form>
       </div>
       <div id="loggedin-view" class="fixed" style="display:none";>
         Player: <span id="loggedin-user"></span>
-        <button type="submit" onclick="logout();">Exit</button>
+        <button type="submit" onclick="logout();">Leave Game</button>
       </div>
     </div>
-    <div id="game-container" class="container" style="display:none;">
-      <div id="game-view" class="fixed"></div>
-      <div id="leaderboard-view" class="flex-item">Leader</div>
+    <div class="container">
+      <div id="game-container" class="container flex-item" style="display:none;">
+        <div id="game-view" class="fixed"></div>
+        <div id="leaderboard-container" class="container-column flex-item">
+          Current Players
+          <div id="leaderboard-view" class="flex-item"></div>
+        </div>
+      </div>
+      <div id="leaderboard-global-container" class="container-column flex-item">
+        All Time Players
+        <div id="leaderboard-global-view" class="flex-item"></div>
+      </div>
     </div>
     <script>
-      let gameInstanceId = "Q2_2022_game_id_" + Date.now();
-      let publishKey = "myPublishKey";
-      let subscribeKey = "mySubscribeKey";
-
-      let pubnub = new PubNub({
-        publishKey : "myPublishKey",
-        subscribeKey : "mySubscribeKey",
-        uuid: "__UUID__",
-      });
-
+      let gameInstanceId = `Q2_2022_game_id_${Date.now()}`;
+      let gameChannel = `scores-${gameInstanceId}`;
+      let leaderboardChannel = `leaderboard-${gameInstanceId}-points`;
+      let leaderboardGlobalChannel = `leaderboard-points`;
+      let publishKey = 'myPublishKey';
+      let uuid = '__UUID__';
+      let subscribeKey = 'mySubscribeKey';
       let loginView = $('#login-view');
       let loggedinView = $('#loggedin-view');
       let loggedinUser= $('#loggedin-user');
       let gameContainer = $('#game-container');
       let gameView = $('#game-view');
       let leaderboardView = $('#leaderboard-view');
+      let leaderboardGlobalView = $('#leaderboard-global-view');
       let gameInstanceView = $('#game-instance');
       let userNameTextBox = $('#username');
 
       gameInstanceView.text(`(${gameInstanceId})`);
 
+      let pubnub = new PubNub({
+        publishKey,
+        subscribeKey,
+        uuid,
+      });
+
+      let game = new Game();
+      let leaderboard = new Leaderboard();
+      let leaderboardGlobal = new Leaderboard();
+
+      leaderboardGlobal.start(leaderboardGlobalView, gameInstanceId, uuid, pubnub, leaderboardGlobalChannel);
+
       function login() {
         let username = userNameTextBox.val();
 
         if (username.length < 1) {
-          alert('user name required');
+          alert('Player name required');
         } else {
           startGame(username);
         }
       }
 
       function logout() {
-        userNameTextBox.val("");
+        userNameTextBox.val('');
 
         stopGame();
       }
@@ -79,8 +98,8 @@
 
         loggedinUser.text(uuid);
 
-        game.start(gameView, gameInstanceId, uuid, pubnub);
-        leaderboard.start(leaderboardView, gameInstanceId, uuid, pubnub);
+        game.start(gameView, gameInstanceId, uuid, pubnub, gameChannel);
+        leaderboard.start(leaderboardView, leaderboardGlobalView, gameInstanceId, uuid, pubnub, leaderboardChannel);
       }
 
       function stopGame() {

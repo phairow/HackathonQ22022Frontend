@@ -11,14 +11,18 @@ html {
   border-color: transparent;
 }
 
-#leaderboard-view {
+#leaderboard-container, #leaderboard-global-container{
+  margin-left: 10px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+#leaderboard-view, #leaderboard-global-view {
   display: inline-flex;
   border-width: 1px;
   border-style: solid;
   border-color: black;
-  margin-left: 10px;
-  margin-top: 1px;
-  margin-bottom: 1px;
+  margin-top: 5px;
   padding: 10px;
 }
 
@@ -35,8 +39,43 @@ html {
   font-weight: bold;
 }
 
-.container{
+.leaderboard-header {
+  border-width: 1px;
+  border-bottom-style: solid;
+  border-color: #c0c5ce;
+}
+
+.leaderboard-row {
+  margin-bottom: 4px;
+}
+
+.leaderboard-column-pic {
+  display: inline-block;
+  width: 30px;
+}
+
+.leaderboard-column-name {
+  display: inline-block;
+  width: 180px;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.leaderboard-column-score {
+  display: inline-block;
+  width: 60px;
+}
+
+.container {
   display: flex;
+}
+
+.container-column {
+  display: flex;
+  flex-direction: column;
 }
 
 .fixed{
