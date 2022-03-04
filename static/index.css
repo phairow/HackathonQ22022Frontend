@@ -12,13 +12,6 @@ html {
   margin-top: 3px;
 }
 
-/**
-  hide global leaderboard
-*/
-#leaderboard-global-container {
-  display:none;
-}
-
 #leaderboard-container, #leaderboard-global-container{
   margin-left: 10px;
   margin-top: 1px;

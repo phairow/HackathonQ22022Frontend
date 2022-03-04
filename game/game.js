@@ -26,11 +26,13 @@ class Game {
     this.firecounter = 0;
   }
 
-  start(gameView, gameInstanceId, uuid, pubnub, gameChannel) {
+  start(gameView, gameId, gameInstanceId, uuid, pubnub, gameGlobalChannel, gameChannel) {
+    this.gameGlobalChannel = gameGlobalChannel;
     this.gameChannel = gameChannel;
     this.pubnub = pubnub;
     this.uuid = uuid;
     this.gameInstanceId = gameInstanceId;
+    this.gameId = gameId;
     this.app = new PIXI.Application({ width: 640, height: 360 });
 
     pubnub.setUUID(uuid);
@@ -209,22 +211,56 @@ class Game {
         gameInstanceId: this.gameInstanceId,
         uuid: this.uuid, 
         stats: [
-            {
-                key: 'points', 
-                value: this.score,
-            },
-            {
-                key: 'health', 
-                value: this.shield,
-            },
-            {
-                key: 'ammo', 
-                value: this.ammo,
-            },
-            {
-                key: 'shots', 
-                value: this.shots,
-            }
+          {
+            key: 'points', 
+            value: this.score,
+          },
+          {
+            key: 'health', 
+            value: this.shield,
+          },
+          {
+            key: 'ammo', 
+            value: this.ammo,
+          },
+          {
+            key: 'shots', 
+            value: this.shots,
+          },
+          {
+            key: 'speed', 
+            value: this.speed,
+          }
+        ]
+      }
+    });
+
+    this.pubnub.publish({
+      channel: this.gameGlobalChannel,
+      message: {
+        gameInstanceId: this.gameId,
+        uuid: this.uuid, 
+        stats: [
+          {
+            key: 'points', 
+            value: this.score,
+          },
+          {
+            key: 'health', 
+            value: this.shield,
+          },
+          {
+            key: 'ammo', 
+            value: this.ammo,
+          },
+          {
+            key: 'shots', 
+            value: this.shots,
+          },
+          {
+            key: 'speed', 
+            value: this.speed,
+          }
         ]
       }
     });

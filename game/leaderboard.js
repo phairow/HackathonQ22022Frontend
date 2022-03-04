@@ -6,8 +6,7 @@ class Leaderboard {
     this.leaders = [];
   }
 
-  start(board, gameInstanceId, uuid, channel) {
-    this.channel = channel;
+  start(board, gameInstanceId, uuid) {
     this.uuid = uuid;
     this.gameInstanceId = gameInstanceId;
     this.board = board;
