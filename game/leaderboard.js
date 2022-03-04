@@ -74,11 +74,12 @@ class Leaderboard {
 
   getProfile(uuid) {
     let playerName = uuid;
+    let playerId = uuid.toLowerCase();
     let playerPic = 'box.png';
 
-    if ([ 'john', 'drew', 'rai' ].includes(uuid.toLowerCase())) {
+    if ([ 'john', 'drew', 'rai' ].includes(playerId)) {
       playerName = uuid.charAt(0).toUpperCase() + uuid.slice(1);
-      playerPic = `${uuid}.jpeg`;
+      playerPic = `${playerId}.jpeg`;
     }
 
     return {

@@ -9,13 +9,13 @@ class Game {
     this.app = undefined;
     this.gameInstanceId = undefined;
     this.missiles = [];
-    this.hits = [];
 
     // stats
     this.score = 0;
     this.shield = 100;
     this.ammo = 1000;
     this.shots = 0;
+    this.speed = 0;
 
     // actions
     this.moveLeft = false;
@@ -42,6 +42,8 @@ class Game {
     this.render();
     this.sendScore();
     this.keyboard();
+
+    this.sendScoreTimer = undefined;
   }
 
   stop() {
@@ -82,7 +84,7 @@ class Game {
       enemy.y = headerHeight;
 
       let missilesToRemove = [];
-      this.missiles.forEach((missile) => {
+      this.missiles.forEach((missile, index) => {
         if (missile.y > headerHeight) {
           missile.y -= 10;
 
@@ -98,22 +100,21 @@ class Game {
             missileLeft < enemyRight &&
             missileTop <= enemyBottom
           ) {
-            if (!this.hits.includes(missile)) {
-              this.hits.push(missile);
-              this.score += 1;
-              missilesToRemove.push(missile);
-              this.app.stage.removeChild(missile);
-            }
+            this.score += 1;
+            this.app.stage.removeChild(missile);
+            missilesToRemove.push(index);
           }
         } else {
-          missilesToRemove.push(missile);
           this.app.stage.removeChild(missile);
+          missilesToRemove.push(index);
         }
       });
 
-      missilesToRemove.forEach((missile, index) => {
-        delete this.missiles[index];
+      missilesToRemove.forEach((m) => {
+        this.missiles.splice(m,1);
       });
+
+      missilesToRemove = [];
 
       if (this.moveLeft) {
         if (this.shooter.x > headerHeight) {
@@ -148,7 +149,15 @@ class Game {
 
       if (previousScore !== this.score) {
         previousScore = this.score;
-        this.sendScore();
+
+        if (this.sendScoreTimer) {
+          clearInterval(this.sendScoreTimer);
+        }
+        
+        this.sendScoreTimer = setTimeout(() => {
+          this.sendScore();
+          this.sendScoreTimer = undefined;
+        }, 500);
       }
     });
 
@@ -209,7 +218,7 @@ class Game {
       channel: this.gameChannel,
       message: {
         gameInstanceId: this.gameInstanceId,
-        uuid: this.uuid, 
+        playerId: this.uuid, 
         scores: [
           {
             key: 'points', 
@@ -239,7 +248,7 @@ class Game {
       channel: this.gameGlobalChannel,
       message: {
         gameInstanceId: this.gameId,
-        uuid: this.uuid, 
+        playerId: this.uuid, 
         scores: [
           {
             key: 'points', 
