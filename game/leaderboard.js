@@ -76,7 +76,7 @@ class Leaderboard {
     let playerName = uuid;
     let playerPic = 'box.png';
 
-    if ([ 'john', 'drew', 'rai' ].includes(uuid)) {
+    if ([ 'john', 'drew', 'rai' ].includes(uuid.toLowerCase())) {
       playerName = uuid.charAt(0).toUpperCase() + uuid.slice(1);
       playerPic = `${uuid}.jpeg`;
     }
