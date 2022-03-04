@@ -210,7 +210,7 @@ class Game {
       message: {
         gameInstanceId: this.gameInstanceId,
         uuid: this.uuid, 
-        stats: [
+        scores: [
           {
             key: 'points', 
             value: this.score,
@@ -240,7 +240,7 @@ class Game {
       message: {
         gameInstanceId: this.gameId,
         uuid: this.uuid, 
-        stats: [
+        scores: [
           {
             key: 'points', 
             value: this.score,
