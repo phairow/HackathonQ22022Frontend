@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width">
     <meta charset="utf-8">
 
-    <title>Hackathon 2022 Game</title>
+    <title>Missile Blast (PNPublish Leaderboard Action Mashup)</title>
 
     <link rel="icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/index.css?v=0.0.2">
@@ -16,14 +16,15 @@
     <script src="/game/leaderboard.js?v=0.0.2"></script>
   </head>
   <body>
-    <h1 id="heading">
-      Hackathon 2022
+    <h3 id="heading">
+      Missile Blast (PNPublish Leaderboard Action Mashup)
+      <br/>
       <span id="game-instance"></span>
       <a href="javascript:" class="share-button" target="">
         <img class="share-icon" src="/game/share.png" />
       </a>
       <span style="display:none;font-size:12px;" class="share-message">Copied to clipboard!</span>
-    </h1>
+    </h3>
     <div id="login-container" class="container">
       <div id="login-view" class="fixed">
         <form action="javascript:() => false;">
@@ -93,28 +94,51 @@
         publishKey,
         subscribeKey,
         uuid,
-        origin: "ingress-tcp-pub.pdx1.aws.int.ps.pn",
         ssl: false,
+        restore: true
       });
 
+      let reconnect = undefined;
+
       pubnub.addListener({
+        status: (s) => {
+          console.log('status', s);
+
+          if (s.category === 'PNConnectedCategory' && s.operation === 'PNSubscribeOperation') {
+            clearInterval(reconnect);
+            reconnect = undefined;
+          }
+          
+          if (s.error) {
+            if (reconnect) {
+              clearInterval(reconnect);
+               reconnect = undefined;
+            }
+            reconnect = setInterval(() => {
+              console.log('reconnecting');
+              pubnub.reconnect();
+            }, 1000);
+          }
+        },
         message: (m) => {
-          if (m.channel === gameChannel) {
-            console.log('game channel:', m.message)
-          }
-
-          if (m.channel === gameGlobalChannel) {
-            console.log('game global channel:', m.message)
-          }
-
-          if (m.channel === leaderboardChannel) {
-            console.log('leaderboard channel:', m.message)
-            leaderboard.setLeaders(m.message.leaders);
-          }
-
-          if (m.channel === leaderboardGlobalChannel) {
-            console.log('leaderboard global channel:', m.message)
-            leaderboardGlobal.setLeaders(m.message.leaders);
+          clearInterval(reconnect);
+          reconnect = undefined;
+          try {
+            if (m.channel === gameChannel) {
+              console.log('game channel:', m.message)
+            } else if (m.channel === gameGlobalChannel) {
+              console.log('game global channel:', m.message)
+            } else if (m.channel === leaderboardChannel) {
+              console.log('leaderboard channel:', m.message)
+              leaderboard.setLeaders(m.message.leaders);
+            } else if (m.channel === leaderboardGlobalChannel) {
+              console.log('leaderboard global channel:', m.message)
+              leaderboardGlobal.setLeaders(m.message.leaders);
+            } else {
+              console.log('unknown channel', m)
+            }
+          } catch (e) {
+            console.log('error in susbscribe listener', e);
           }
         }
       });
@@ -152,8 +176,12 @@
 
       })();
 
-//       leaderboardGlobal.setLeaders({
-//     "gameInstanceId": "Q2_2022_game_id_1646336939946",
+//       let score = 0;
+
+//       setInterval(() => {
+        
+//       pubnub.publish({ channel: leaderboardGlobalChannel, message: {
+//     "gameInstanceId": "Q2_2022_game_id",
 //     "stat": "points",
 //     "leaders": [
 //         {
@@ -207,7 +235,25 @@
 //             "gameInstanceId": "Q2_2022_game_id_1646336939946"
 //         }
 //     ]
-// }.leaders);
+// }});
+// pubnub.publish({ channel: leaderboardChannel, message: {
+//     "gameInstanceId": "Q2_2022_game_id_1646681580107",
+//     "stat": "points",
+//     "leaders": [
+//         {
+//             "playerId": "fooo",
+//             "score": score++,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//         {
+//             "playerId": "Rai",
+//             "score": 2.43,
+//             "gameInstanceId": "Q2_2022_game_id_1646336939946"
+//         },
+//     ]
+// }});
+
+// }, 3000);
 
       function login() {
         let username = userNameTextBox.val();
